@@ -4,19 +4,14 @@ from bs4 import BeautifulSoup
 
 
 def main() -> None:
-    url = "http://olympus.realpython.org/profiles/dionysus"
-    response = urlopen(url)
+    base_url = "http://olympus.realpython.org"
+    response = urlopen(f"{base_url}/profiles")
     html = response.read().decode("utf-8")
     soup = BeautifulSoup(html, "html.parser")
 
-    if soup.title:
-        print(f"TITLE: {soup.title.string}")
-
-    body = soup.find("body")
-    if body:
-        for line in filter(None, body.get_text().splitlines()):
-            param, value = line.split(": ")
-            print(f"{param.upper()}: {value}")
+    for anchor in soup.find_all("a"):
+        anchor_url = base_url + anchor["href"]
+        print(anchor_url)
 
 
 if __name__ == "__main__":
