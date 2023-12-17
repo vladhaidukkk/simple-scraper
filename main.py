@@ -1,11 +1,10 @@
+import re
 from urllib.request import urlopen
 
 
-def get_tag_content(html: str, tag: str) -> str:
-    tag_start = html.index(f"<{tag}")
-    start = tag_start + html[tag_start:].index(">") + 1
-    end = html.index(f"</{tag}")
-    return html[start:end]
+def get_tag_content(html: str, tag: str) -> str | None:
+    match = re.search(rf"<{tag}.*?>(.*?)</{tag}.*?>", html, re.IGNORECASE)
+    return match.groups()[0] if match else None
 
 
 def main() -> None:
