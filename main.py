@@ -1,23 +1,18 @@
-from bs4 import BeautifulSoup
+from time import sleep
+
 from mechanicalsoup import Browser
 
 
 def main() -> None:
-    base_url = "http://olympus.realpython.org"
     browser = Browser()
-    login_resp = browser.get(f"{base_url}/login")
-    login: BeautifulSoup = login_resp.soup  # type: ignore
 
-    form = login.select("form")[0]
-    form.select("input")[0]["value"] = "zeus"
-    form.select("input")[1]["value"] = "ThunderDude"
+    for i in range(5):
+        if i != 0:
+            sleep(1)
 
-    profiles_resp = browser.submit(form, login_resp.url)
-    profiles: BeautifulSoup = profiles_resp.soup  # type: ignore
-
-    for anchor in profiles.select("a"):
-        anchor_url = base_url + anchor["href"]  # type: ignore
-        print(anchor_url)
+        resp = browser.get("http://olympus.realpython.org/dice")
+        result = resp.soup.select_one("#result").text  # type: ignore
+        print(result)
 
 
 if __name__ == "__main__":
